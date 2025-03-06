@@ -45,7 +45,12 @@ ENV PYTHONPATH="${PYTHONPATH}:/workspace/CosyVoice:/workspace/CosyVoice/third_pa
 RUN git clone --recursive https://github.com/FunAudioLLM/CosyVoice.git
 
 RUN conda activate ${VENV} && conda install -y -c conda-forge pynini==2.1.5
-RUN conda activate ${VENV} && cd CosyVoice && \
+RUN conda activate ${VENV} && \
+    echo "Current CONDA_DEFAULT_ENV: $CONDA_DEFAULT_ENV" && \
+    echo "Current PATH: $PATH" && \
+    cd CosyVoice && \
     pip install -r requirements.txt
+#RUN conda activate ${VENV} && cd CosyVoice && \
+#    pip install -r requirements.txt
 
 WORKDIR /workspace/CosyVoice
