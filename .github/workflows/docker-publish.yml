@@ -19,11 +19,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Build and push Docker images
-        uses: docker/build-push-action@v5
-        with:
-          context: /docker  # 构建上下文为 myapp 目录，Dockerfile 在此目录中
-          
       - name: Checkout repository
         uses: actions/checkout@v3
 
