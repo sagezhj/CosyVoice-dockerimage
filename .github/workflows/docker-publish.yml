@@ -1,0 +1,51 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches: ['main']
+    tags: ['v*.*.*']
+  pull_request:
+    branches: ['main']
+  schedule:
+    - cron: '18 6 * * *'
+
+env:
+  REPOSITORY_GHCR: sagezhj/CosyVoice-dockerimage 
+  IMAGE_NAME: CosyVoice-dockerimage
+  TAG: latest
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image for GHCR
+        run: |
+         docker build -t $REPOSITORY_GHCR/$IMAGE_NAME:$TAG .
+          docker push $REPOSITORY_GHCR/$IMAGE_NAME:$TAG
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Build Docker image for Docker Hub
+        run: |
+          docker build -t your-dockerhub-username/$IMAGE_NAME:$TAG .
+          docker push your-dockerhub-username/$IMAGE_NAME:$TAG
+
+      - name: Cache Docker layer
+        uses: actions/cache@v3
+        with:
+          path: /home/runner/.docker/cli-plugins/
+          key: ${{ runner.os }}-docker-buildx-${{ hashFiles('**/Dockerfile') }}
