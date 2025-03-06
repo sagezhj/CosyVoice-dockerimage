@@ -11,7 +11,7 @@ on:
 #    - cron: '18 6 * * *'
   
 env:
-  REPOSITORY_GHCR: sagezhj/cosyvoice 
+  REPOSITORY_GHCR: sagezhj 
   IMAGE_NAME: cosyvoice-dockerimage
   TAG: latest
 jobs:
